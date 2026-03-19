@@ -164,13 +164,69 @@ def test_list_products_valid():
 # ============================================================
 # PART B - Exception Testing (12 marks)
 # Write at least 6 tests using pytest.raises.
-# Cover: empty name, negative price, duplicate product,
-#        stock going below zero, product not found, etc.
+# add_product with empty product_id → ValueError
+# add_product with empty name → ValueError
+# add_product with negative price → ValueError
+# add_product with duplicate product_id → ValueError
+# update_stock that would make stock negative → ValueError
+# calculate_total with quantity <= 0 → ValueError
+# Tip: Use the match parameter to verify the error message, e.g.: pytest.raises(ValueError, match="Price must be positive")
+
 # ============================================================
 
 # TODO: Write your Part B tests here
 
 
+def test_add_product_empty_product_id():
+    # Arrange
+    product_id = ""
+    name = "Product 1"
+    price = 10.0
+    stock = 100
+    # Act
+    with pytest.raises(ValueError, match="Product ID and name are required"):
+        add_product(product_id, name, price, stock)
+    # Assert
+    assert get_product(product_id) is None
+
+
+def test_add_product_empty_name():
+    # Arrange
+    product_id = "123"
+    name = ""
+    price = 10.0
+    stock = 100
+    # Act
+    with pytest.raises(ValueError, match="Product ID and name are required"):
+        add_product(product_id, name, price, stock)
+    # Assert
+    assert get_product(product_id) is None
+
+
+def test_add_product_negative_price():
+    # Arrange
+    product_id = "123"
+    name = "Product 1"
+    price = -10.0
+    stock = 100
+    # Act
+    with pytest.raises(ValueError, match="Price must be positive"):
+        add_product(product_id, name, price, stock)
+    # Assert
+    assert get_product(product_id) is None
+
+
+def test_add_product_duplicate_product_id():
+    # Arrange
+    product_id = "123"
+    name = "Product 1"
+    price = 10.0
+    stock = 100
+    # Act
+    add_product(product_id, name, price, stock)
+    # Assert
+    with pytest.raises(ValueError, match="Product '123' already exists"):
+        add_product(product_id, name, price, stock)
 # ============================================================
 # PART C - Fixtures and Parametrize (10 marks)
 #
