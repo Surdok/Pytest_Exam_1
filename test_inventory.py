@@ -257,16 +257,55 @@ def test_calculate_total_negative_quantity():
 # ============================================================
 # PART C - Fixtures and Parametrize (10 marks)
 #
-# C1: Create a @pytest.fixture called "sample_products" that
-#     adds 3 products to the inventory and returns their IDs.
-#     Write 2 tests that use this fixture.
-#
-# C2: Use @pytest.mark.parametrize to test apply_bulk_discount
-#     with at least 5 different (total, quantity, expected) combos.
-# ============================================================
+# C1:
+
+# Create a @pytest.fixture called sample_products that:
+# Adds 3 products to inventory
+# (e.g. "P001" Laptop $999.99 stock 10, "P002" Mouse $29.99 stock 50, "P003" Keyboard $79.99 stock 25)
+# Returns a list of the 3 product IDs: ["P001", "P002", "P003"]
+# Then write 2 tests that use this fixture. For example, test that list_products returns 3 items, or test that calculate_total works for one of the sample products.
+
 
 # TODO: Write your Part C tests here
 
+
+@pytest.fixture
+def sample_products():
+    product_id_1 = "P001"
+    product_id_2 = "P002"
+    product_id_3 = "P003"
+    add_product(product_id_1, "Laptop", 999.99, 10)
+    add_product(product_id_2, "Mouse", 29.99, 50)
+    add_product(product_id_3, "Keyboard", 79.99, 25)
+    return list_products()
+
+
+def test_list_products_with_sample_products(sample_products):
+
+    assert len(sample_products) == 3
+
+
+def test_calculate_total_with_sample_products(sample_products):
+    assert calculate_total(sample_products[0]['product_id'], 10) == 999.99 * 10
+
+# Use @pytest.mark.parametrize to test apply_bulk_discount with at least 5 different input combinations.
+# Each row should be (total, quantity, expected_result).
+# Remember the discount rules:
+# •	Under 10 items → no discount (0%)
+# •	10–24 items → 5% off
+# •	25–49 items → 10% off
+# •	50+ items → 15% off
+
+
+@pytest.mark.parametrize("total, quantity, expected_result", [
+    (500, 5, 500),
+    (500, 10, 500 * 0.95),
+    (500, 25, 500 * 0.9),
+    (500, 49, 500 * 0.9),
+    (500, 50, 500 * 0.85),
+])
+def test_apply_bulk_discount(total, quantity, expected_result):
+    assert apply_bulk_discount(total, quantity) == expected_result
 
 # ============================================================
 # PART D - Mocking (5 marks)
