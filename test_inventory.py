@@ -14,6 +14,7 @@ Run with coverage:
 import pytest
 from unittest.mock import patch
 from inventory import (
+    _send_restock_alert,
     add_product,
     get_product,
     update_stock,
@@ -311,6 +312,34 @@ def test_apply_bulk_discount(total, quantity, expected_result):
 # ============================================================
 
 # TODO: Write your Part D tests here
+
+
+@patch("inventory._send_restock_alert")
+def test_update_stock_calls_restock_alert_when_below_threshold(mock_send_alert):
+    # Arrange
+    product_id = "P100"
+    name = "Notebook"
+    add_product(product_id, name, 25.0, 6)
+
+    # Act
+    update_stock(product_id, -3)  # new stock = 3
+
+    # Assert
+    mock_send_alert.assert_called_once_with(product_id, name, 3)
+
+
+@patch("inventory._send_restock_alert")
+def test_update_stock_does_not_call_restock_alert_when_stock_is_5_or_more(mock_send_alert):
+    # Arrange
+    product_id = "P200"
+    name = "Monitor"
+    add_product(product_id, name, 300.0, 20)
+
+    # Act
+    update_stock(product_id, -5)  # new stock = 15
+
+    # Assert
+    mock_send_alert.assert_not_called()
 
 
 # ============================================================
