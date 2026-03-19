@@ -128,6 +128,16 @@ def list_products():
     ]
 
 
+def get_low_stock_products(threshold):
+    """Return products with stock strictly less than threshold."""
+    inventory = _load_inventory()
+    return [
+        {"product_id": pid, **data}
+        for pid, data in inventory.items()
+        if data["stock"] < threshold
+    ]
+
+
 def _send_restock_alert(product_id, product_name, current_stock):
     """External alerting service - mock this in tests."""
     raise NotImplementedError("Restock alert service not configured")

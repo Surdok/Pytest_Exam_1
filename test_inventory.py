@@ -21,6 +21,7 @@ from inventory import (
     calculate_total,
     apply_bulk_discount,
     list_products,
+    get_low_stock_products,
 )
 
 
@@ -358,3 +359,24 @@ def test_update_stock_does_not_call_restock_alert_when_stock_is_5_or_more(mock_s
 # ============================================================
 
 # TODO: Write your bonus tests here (optional)
+@pytest.mark.parametrize(
+    "threshold, expected_ids",
+    [
+        (5, ["L1", "L2"]),              # stocks 0 and 4
+        (100, ["L1", "L2", "L3", "L4"]),  # all products
+        (0, []),                        # strictly less than 0 -> none
+    ],
+)
+def test_get_low_stock_products_parametrized(threshold, expected_ids):
+    # Arrange
+    add_product("L1", "Item 1", 10.0, 0)
+    add_product("L2", "Item 2", 20.0, 4)
+    add_product("L3", "Item 3", 30.0, 15)
+    add_product("L4", "Item 4", 40.0, 70)
+
+    # Act
+    low_stock_products = get_low_stock_products(threshold)
+    result_ids = [product["product_id"] for product in low_stock_products]
+
+    # Assert
+    assert result_ids == expected_ids
