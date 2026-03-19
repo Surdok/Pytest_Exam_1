@@ -89,9 +89,9 @@ def test_get_product_invalid():
     # Arrange
     product_id = "123"
     # Act
-
+    product = get_product(product_id)
     # Assert
-    assert get_product(product_id) is None
+    assert product is None
 
 
 def test_update_stock_valid():
@@ -100,8 +100,8 @@ def test_update_stock_valid():
     name = "Product 1"
     price = 10.0
     stock = 100
-    add_product(product_id, name, price, stock)
     # Act
+    add_product(product_id, name, price, stock)
     update_stock(product_id, 10)
     # Assert
     assert get_product(product_id) == {
@@ -114,8 +114,8 @@ def test_update_stock_invalid():
     name = "Product 1"
     price = 10.0
     stock = 2
-    add_product(product_id, name, price, stock)
     # Act
+    add_product(product_id, name, price, stock)
     with pytest.raises(ValueError):
         update_stock(product_id, -10)
     # Assert
@@ -141,8 +141,8 @@ def test_calculate_total_invalid():
     name = "Product 1"
     price = 10.0
     stock = 100
-    add_product(product_id, name, price, stock)
     # Act
+    add_product(product_id, name, price, stock)
     with pytest.raises(ValueError):
         calculate_total(product_id, -10)
     # Assert
