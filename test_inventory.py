@@ -227,6 +227,20 @@ def test_add_product_duplicate_product_id():
     # Assert
     with pytest.raises(ValueError, match="Product '123' already exists"):
         add_product(product_id, name, price, stock)
+
+
+def test_update_stock_negative_stock():
+    # Arrange
+    product_id = "123"
+    name = "Product 1"
+    price = 10.0
+    stock = 100
+    # Act
+    add_product(product_id, name, price, stock)
+    # Assert
+    with pytest.raises(ValueError, match="Stock cannot go below zero"):
+        update_stock(product_id, -110)
+
 # ============================================================
 # PART C - Fixtures and Parametrize (10 marks)
 #
