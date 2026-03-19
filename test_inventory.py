@@ -268,6 +268,7 @@ def test_calculate_total_negative_quantity():
 
 # TODO: Write your Part C tests here
 
+# C1 :
 
 @pytest.fixture
 def sample_products():
@@ -288,13 +289,7 @@ def test_list_products_with_sample_products(sample_products):
 def test_calculate_total_with_sample_products(sample_products):
     assert calculate_total(sample_products[0]['product_id'], 10) == 999.99 * 10
 
-# Use @pytest.mark.parametrize to test apply_bulk_discount with at least 5 different input combinations.
-# Each row should be (total, quantity, expected_result).
-# Remember the discount rules:
-# •	Under 10 items → no discount (0%)
-# •	10–24 items → 5% off
-# •	25–49 items → 10% off
-# •	50+ items → 15% off
+# C2 :
 
 
 @pytest.mark.parametrize("total, quantity, expected_result", [
