@@ -241,6 +241,19 @@ def test_update_stock_negative_stock():
     with pytest.raises(ValueError, match="Stock cannot go below zero"):
         update_stock(product_id, -110)
 
+
+def test_calculate_total_negative_quantity():
+    # Arrange
+    product_id = "123"
+    name = "Product 1"
+    price = 10.0
+    stock = 100
+    # Act
+    add_product(product_id, name, price, stock)
+    # Assert
+    with pytest.raises(ValueError, match="Quantity must be positive"):
+        calculate_total(product_id, -10)
+
 # ============================================================
 # PART C - Fixtures and Parametrize (10 marks)
 #
